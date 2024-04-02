@@ -25,9 +25,9 @@ type TrendingCollections = NonNullable<
 >
 
 type Props = {
-  collections: TrendingCollections
+  collections: any
   loading?: boolean
-  volumeKey: keyof NonNullable<TrendingCollections[0]['collectionVolume']>
+  volumeKey: keyof NonNullable<any>
 }
 const gridColumns = {
   gridTemplateColumns: '520px repeat(5, 0.5fr) 250px',
