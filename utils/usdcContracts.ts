@@ -1,5 +1,6 @@
 const usdcContracts: Record<number, string> = {
   1: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // mainnet
+  369: '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07', // pulsechain
   5: '0x07865c6e87b9f70255377e024ace6630c1eaa37f', // goerli
   10: '0x7f5c764cbc14f9669b88837ca1490cca17c31607', // optimism
   56: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // bnb

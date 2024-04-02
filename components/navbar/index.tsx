@@ -66,10 +66,10 @@ const Navbar = () => {
           <Link href={`/${routePrefix}`}>
             <Box css={{ width: 46, cursor: 'pointer' }}>
               <Image
-                src="/reservoirLogo.svg"
+                src="/logo.png"
                 width={36}
                 height={36}
-                alt="Reservoir"
+                alt="9mm"
               />
             </Box>
           </Link>
@@ -115,10 +115,11 @@ const Navbar = () => {
           <Link href={`/${routePrefix}`}>
             <Box css={{ cursor: 'pointer' }}>
               <Image
-                src="/reservoirLogo.svg"
-                width={36}
-                height={36}
-                alt="Reservoir"
+                src="/logo.png"
+                width={52}
+                height={52}
+                alt="9mm"
+                style={{ 'borderRadius': '15px' }}
               />
             </Box>
           </Link>
@@ -185,48 +186,6 @@ const Navbar = () => {
         align="center"
       >
         <Flex css={{ gap: '$5', mr: 12 }}>
-          <Box>
-            <HoverCard.Root openDelay={120}>
-              <HoverCard.Trigger>
-                <a target="_blank" href={`https://docs.reservoir.tools/docs`}>
-                  <NavItem>Developers</NavItem>
-                </a>
-              </HoverCard.Trigger>
-              <HoverCard.Content sideOffset={24} align="start">
-                <Card css={{ p: 24, width: 240 }}>
-                  <Flex css={{ gap: '$4' }} direction="column">
-                    <a target="_blank" href={`https://reservoir.tools`}>
-                      <NavItem>About Reservoir</NavItem>
-                    </a>
-                    <a
-                      target="_blank"
-                      href={`https://docs.reservoir.tools/docs`}
-                    >
-                      <NavItem>Docs</NavItem>
-                    </a>
-
-                    <a
-                      target="_blank"
-                      href={`https://docs.reservoir.tools/reference/overview`}
-                    >
-                      <NavItem>API Reference</NavItem>
-                    </a>
-
-                    <a
-                      target="_blank"
-                      href={`https://github.com/reservoirprotocol`}
-                    >
-                      <NavItem>Github</NavItem>
-                    </a>
-
-                    <a href={`https://testnets.reservoir.tools`}>
-                      <NavItem>Testnet Explorer</NavItem>
-                    </a>
-                  </Flex>
-                </Card>
-              </HoverCard.Content>
-            </HoverCard.Root>
-          </Box>
           {isConnected && (
             <Link href={`/portfolio/${address || ''}?chain=${routePrefix}`}>
               <Box css={{ mr: '$2' }}>

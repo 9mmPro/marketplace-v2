@@ -13,6 +13,8 @@ const TESTNET_CHAINS: Chain[] = [
   reservoirChains.zoraTestnet,
 ]
 
+
+
 const MAINNET_CHAINS: Chain[] = [
   reservoirChains.mainnet,
   reservoirChains.polygon,
@@ -26,6 +28,28 @@ const MAINNET_CHAINS: Chain[] = [
   reservoirChains.zkSync,
   reservoirChains.polygonZkEvm,
   reservoirChains.scroll,
+  {
+    id: 369,
+    name: 'PulseChain',
+    baseApiUrl: 'https://nft-v2.9mm.pro',
+    paymentTokens: [
+      {
+        chainId: 369,
+        address: '0x0000000000000000000000000000000000000000',
+        symbol: 'PLS',
+        name: 'PLS',
+        decimals: 18
+      },
+      {
+        chainId: 369,
+        address: '0xa1077a294dde1b09bb078844df40758a5d0f9a27',
+        symbol: 'WPLS',
+        name: 'WPLS',
+        decimals: 18
+      }
+    ],
+    checkPollingInterval: 1000
+  }
 ]
 
 const MAINNET_DEPLOYMENT_URLS = [

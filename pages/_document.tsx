@@ -35,12 +35,12 @@ class MyDocument extends Document {
         <link
           rel="shortcut icon"
           type="image/svg"
-          href="https://marketplace.reservoir.tools/reservoir.svg"
+          href="/logo_light.png"
         />
 
         {/* Reservoir meta tags */}
-        <meta property="reservoir:title" content="Reservoir NFT Explorer" />
-        <meta property="reservoir:icon" content="/reservoir-source-icon.png" />
+        <meta property="reservoir:title" content="9mm NFT Explorer" />
+        <meta property="reservoir:icon" content="/logo_light.png" />
         <meta
           property="reservoir:token-url-mainnet"
           content="/ethereum/asset/${contract}:${tokenId}"

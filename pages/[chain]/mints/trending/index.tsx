@@ -32,7 +32,7 @@ const IndexPage: NextPage<Props> = ({ ssr }) => {
   const isSmallDevice = useMediaQuery({ maxWidth: 600 })
 
   const [mintType, setMintType] = useState<MintTypeOption>('any')
-  const [sortByPeriod, setSortByPeriod] = useState<MintsSortingOption>('24h')
+  const [sortByPeriod, setSortByPeriod] = useState<any>('7d')
 
   let mintQuery: Parameters<typeof useTrendingMints>['0'] = {
     limit: 20,
@@ -141,17 +141,18 @@ export const getServerSideProps: GetServerSideProps<{
   }
 }> = async ({ res, params }) => {
   const mintsQuery: paths['/collections/trending-mints/v1']['get']['parameters']['query'] =
-    {
-      limit: 20,
-      period: '24h',
-      type: 'any',
-    }
+  {
+    limit: 20,
+    period: '24h',
+    type: 'any',
+  }
 
   const chainPrefix = params?.chain || ''
 
   const { reservoirBaseUrl } =
     supportedChains.find((chain) => chain.routePrefix === chainPrefix) ||
     DefaultChain
+
 
   const query = { ...mintsQuery, normalizeRoyalties: NORMALIZE_ROYALTIES }
 

@@ -61,7 +61,7 @@ const HamburgerMenu = () => {
           <Link href="/">
             <Box css={{ width: 46, cursor: 'pointer' }}>
               <Image
-                src="/reservoirLogo.svg"
+                src="/logo.png"
                 width={36}
                 height={36}
                 alt="Reservoir"
@@ -163,7 +163,7 @@ const HamburgerMenu = () => {
             </Link>
 
 
-            <Anchor
+            {/* <Anchor
               href="https://docs.reservoir.tools/docs"
               target="_blank"
               css={{
@@ -175,7 +175,7 @@ const HamburgerMenu = () => {
               }}
             >
               <Text style="subtitle1">Developers</Text>
-            </Anchor>
+            </Anchor> */}
             <Link href="/portfolio" legacyBehavior>
               <Flex
                 direction="column"

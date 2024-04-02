@@ -16,6 +16,7 @@ import {
   base,
   arbitrumNova,
   scroll,
+  pulsechain
 } from 'wagmi/chains'
 import usdcContracts from './usdcContracts'
 
@@ -55,42 +56,83 @@ const usdcCurrencyBase = {
 }
 
 export const DefaultChain: ReservoirChain = {
-  ...mainnet,
+  ...pulsechain,
   // Any url to display the logo of the chain in light mode
-  lightIconUrl: '/icons/eth-icon-dark.svg',
+  lightIconUrl: '/icons/pls.png',
   // Any url to display the logo of the chain in dark mode
-  darkIconUrl: '/icons/eth-icon-light.svg',
+  darkIconUrl: '/icons/pls.png',
   // The base url of the reservoir api, this is used in the app when
   // directly interacting with the reservoir indexer servers (in the api proxy for example)
   // or when prefetching server side rendered data
-  reservoirBaseUrl: reservoirChains.mainnet.baseApiUrl,
+  reservoirBaseUrl: 'https://nft-v2.9mm.pro',
   // Used on the client side portions of the marketplace that need an api key added
   // Prevents the api key from being leaked in the clientside requests
   // If you'd like to disable proxying you can just change the proxyApi to the reservoirBaseUrl
   // Doing so will omit the api key unless further changes are made
-  proxyApi: '/api/reservoir/ethereum',
+  proxyApi: '/api/reservoir/pulsechain',
   // A prefix used in the asset specific routes on the app (tokens/collections)
-  routePrefix: 'ethereum',
+  routePrefix: 'pulsechain',
   // Coingecko id, used to convert the chain's native prices to usd. Can be found here:
   // https://www.coingecko.com/en/api/documentation#operations-coins-get_coins_list
-  coingeckoId: 'ethereum',
-  collectionSetId: process.env.NEXT_PUBLIC_ETH_COLLECTION_SET_ID,
-  community: process.env.NEXT_PUBLIC_ETH_COMMUNITY,
-  wssUrl: 'wss://ws.reservoir.tools',
+  coingeckoId: 'pulsechain',
+  collectionSetId: process.env.NEXT_PUBLIC_PULSE_COLLECTION_SET_ID,
+  community: process.env.NEXT_PUBLIC_PULSE_COMMUNITY,
+  apiKey: process.env.RESERVOIR_PULSE_API_KEY,
+  wssUrl: 'wss://nft-v2.9mm.pro',
   listingCurrencies: [
-    nativeCurrencyBase,
+    {
+      ...nativeCurrencyBase,
+      symbol: 'PLS',
+      coinGeckoId: 'pulsechain',
+    },
     {
       ...usdcCurrencyBase,
-      contract: usdcContracts[mainnet.id],
+      contract: usdcContracts[pulsechain.id],
     },
   ],
-  oracleBidsEnabled: true,
+  oracleBidsEnabled: false,
   checkPollingInterval: reservoirChains.mainnet.checkPollingInterval,
-  paperContractId: process.env.PAPER_ETHEREUM_CONTRACT_ID,
+  paperContractId: process.env.PAPER_PULSE_CONTRACT_ID,
+  blockExplorers: {
+    etherscan: {
+      name: 'PULSECHAIN',
+      url: 'https://scan.9mm.pro',
+    },
+    default: {
+      name: 'PULSECHAIN',
+      url: 'https://scan.9mm.pro',
+    },
+  },
 }
 
 export default [
   DefaultChain,
+  {
+    ...mainnet,
+    lightIconUrl: '/icons/eth-icon-dark.svg',
+    darkIconUrl: '/icons/eth-icon-light.svg',
+    reservoirBaseUrl: reservoirChains.mainnet.baseApiUrl,
+    proxyApi: '/api/reservoir/ethereum',
+    routePrefix: 'ethereum',
+    coingeckoId: 'ethereum',
+    collectionSetId: process.env.NEXT_PUBLIC_ETH_COLLECTION_SET_ID,
+    community: process.env.NEXT_PUBLIC_ETH_COMMUNITY,
+    paperContractId: process.env.PAPER_ETHEREUM_CONTRACT_ID,
+    wssUrl: 'wss://ws.reservoir.tools',
+    listingCurrencies: [
+      {
+        ...nativeCurrencyBase,
+        symbol: 'ETH',
+        coinGeckoId: 'ethereum',
+      },
+      {
+        ...usdcCurrencyBase,
+        contract: usdcContracts[mainnet.id],
+      }
+    ],
+    oracleBidsEnabled: true,
+    checkPollingInterval: reservoirChains.polygon.checkPollingInterval,
+  },
   {
     ...polygon,
     lightIconUrl: '/icons/polygon-icon-dark.svg',

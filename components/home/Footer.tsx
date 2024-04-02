@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Text, Box, Flex, Anchor, Button } from '../primitives'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { faTwitter, faTelegram } from '@fortawesome/free-brands-svg-icons'
 
 type SectionTitleProps = {
   title: string
@@ -85,7 +85,7 @@ export const Footer = () => {
       }}
     >
       <Flex css={{ gap: 80, '@bp600': { gap: 136 } }}>
-        <Flex direction="column">
+        {/* <Flex direction="column">
           <SectionTitle title="Developers" />
           {developerSectionLinks.map((props) => (
             <SectionLink key={props.name} {...props} />
@@ -96,13 +96,13 @@ export const Footer = () => {
           {companySectionLinks.map((props) => (
             <SectionLink key={props.name} {...props} />
           ))}
-        </Flex>
+        </Flex> */}
       </Flex>
       <Flex
         direction="column"
         css={{ alignItems: 'flex-start', '@bp600': { alignItems: 'flex-end' } }}
       >
-        <SectionTitle title="Join Reservoir Community" />
+        <SectionTitle title="Join 9mm Community" />
         <Flex css={{ gap: '$4', mt: 16 }}>
           <a
             target="_blank"
@@ -111,6 +111,15 @@ export const Footer = () => {
           >
             <Button size="xs" color="gray3">
               <FontAwesomeIcon icon={faTwitter} width={14} height={14} />
+            </Button>
+          </a>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://t.co/NQNZ4tEmpD"
+          >
+            <Button size="xs" color="gray3">
+              <FontAwesomeIcon icon={faTelegram} width={14} height={14} />
             </Button>
           </a>
         </Flex>

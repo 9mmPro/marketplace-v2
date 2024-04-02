@@ -7,7 +7,7 @@ import {
   FormatCurrency,
   Text,
 } from 'components/primitives'
-import { mainnet, polygon, optimism } from 'wagmi/chains'
+import { mainnet, polygon, optimism, pulsechain } from 'wagmi/chains'
 import { useAccount, useContractReads, erc20ABI, useBalance } from 'wagmi'
 import { useMemo, useState } from 'react'
 import { zeroAddress, formatUnits } from 'viem'
@@ -16,6 +16,26 @@ import { useCoinConversion } from '@reservoir0x/reservoir-kit-ui'
 //CONFIGURABLE: Here you may configure currencies that you want to display in the wallet menu. Native currencies,
 //like ETH/MATIC etc need to be fetched in a different way. Configure them below
 const currencies = [
+  {
+    address: zeroAddress,
+    symbol: 'PLS',
+    decimals: pulsechain.nativeCurrency.decimals,
+    chain: {
+      id: pulsechain.id,
+      name: pulsechain.name,
+    },
+    coinGeckoId: 'pulsechain',
+  },
+  {
+    address: '0xA1077a294dDE1B09bB078844df40758a5D0f9a27',
+    symbol: 'WPLS',
+    decimals: pulsechain.nativeCurrency.decimals,
+    chain: {
+      id: pulsechain.id,
+      name: pulsechain.name,
+    },
+    coinGeckoId: 'wpls',
+  },
   {
     address: zeroAddress,
     symbol: 'ETH',
@@ -104,6 +124,11 @@ const Wallet = () => {
     address,
     chainId: mainnet.id,
   })
+
+  const plsBalance = useBalance({
+    address,
+    chainId: pulsechain.id,
+  })
   const maticBalance = useBalance({
     address,
     chainId: polygon.id,
@@ -131,6 +156,10 @@ const Wallet = () => {
             balance = maticBalance.data?.value || 0n
             break
           }
+          case pulsechain.id: {
+            balance = plsBalance.data?.value || 0n
+            break
+          }
           case mainnet.id: {
             balance = ethBalance.data?.value || 0n
             break
@@ -145,19 +174,19 @@ const Wallet = () => {
         )
         balance =
           nonNativeBalances &&
-          nonNativeBalances[index] &&
-          (typeof nonNativeBalances[index] === 'string' ||
-            typeof nonNativeBalances[index] === 'number' ||
-            typeof nonNativeBalances[index] === 'bigint')
+            nonNativeBalances[index] &&
+            (typeof nonNativeBalances[index] === 'string' ||
+              typeof nonNativeBalances[index] === 'number' ||
+              typeof nonNativeBalances[index] === 'bigint')
             ? (nonNativeBalances[index] as string | number | bigint)
             : 0n
       }
 
       const conversion =
         currencyToUsdConversions[
-          currency.coinGeckoId.length > 0
-            ? currency.coinGeckoId
-            : currency.symbol.toLowerCase()
+        currency.coinGeckoId.length > 0
+          ? currency.coinGeckoId
+          : currency.symbol.toLowerCase()
         ]
       const usdPrice =
         Number(formatUnits(BigInt(balance), currency?.decimals || 18)) *

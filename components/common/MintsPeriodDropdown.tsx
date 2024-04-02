@@ -13,16 +13,18 @@ export type MintsSortingOption = NonNullable<
   Exclude<Parameters<typeof useTrendingMints>[0], false | undefined>['period']
 >
 
-const sortingOptions: MintsSortingOption[] = [
+const sortingOptions: any[] = [
   '24h',
   '6h',
   '1h',
   '30m',
   '10m',
   '5m',
+  '7d',
+  '30d'
 ]
 
-const nameForSortingOption = (option: MintsSortingOption, compact: boolean) => {
+const nameForSortingOption = (option: any, compact: boolean) => {
   switch (option) {
     case '24h':
       return compact ? '24h' : '24 hours'
@@ -36,6 +38,10 @@ const nameForSortingOption = (option: MintsSortingOption, compact: boolean) => {
       return compact ? '10m' : '10 minutes'
     case '5m':
       return compact ? '5m' : '5 minutes'
+    case '7d':
+      return compact ? '7d' : '7 days'
+    case '30d':
+      return compact ? '30d' : '30 days'
   }
 }
 

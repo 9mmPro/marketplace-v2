@@ -59,9 +59,9 @@ const Home: NextPage<Props> = ({ ssr }) => {
   const isSmallDevice = useMediaQuery({ query: '(max-width: 800px)' })
 
   const [tab, setTab] = useState<TabValue>('collections')
-  const [sortByTime, setSortByTime] = useState<CollectionsSortingOption>('24h')
+  const [sortByTime, setSortByTime] = useState<any>('7d')
 
-  const [sortByPeriod, setSortByPeriod] = useState<MintsSortingOption>('24h')
+  const [sortByPeriod, setSortByPeriod] = useState<any>('7d')
 
   let mintsQuery: Parameters<typeof useTrendingMints>['0'] = {
     limit: 20,
@@ -325,11 +325,11 @@ export const getServerSideProps: GetServerSideProps<{
   }
 
   let trendingCollectionsQuery: paths['/collections/trending/v1']['get']['parameters']['query'] =
-    {
-      period: '24h',
-      limit: 20,
-      sortBy: 'volume',
-    }
+  {
+    period: '24h',
+    limit: 20,
+    sortBy: 'volume',
+  }
 
   const trendingCollectionsPromise = fetcher(
     `${reservoirBaseUrl}/collections/trending/v1`,
@@ -338,11 +338,11 @@ export const getServerSideProps: GetServerSideProps<{
   )
 
   let featuredCollectionQuery: paths['/collections/trending/v1']['get']['parameters']['query'] =
-    {
-      period: '24h',
-      limit: 20,
-      sortBy: 'sales',
-    }
+  {
+    period: '24h',
+    limit: 20,
+    sortBy: 'sales',
+  }
 
   const featuredCollectionsPromise = fetcher(
     `${reservoirBaseUrl}/collections/trending/v1`,
@@ -351,11 +351,11 @@ export const getServerSideProps: GetServerSideProps<{
   )
 
   let trendingMintsQuery: paths['/collections/trending-mints/v1']['get']['parameters']['query'] =
-    {
-      period: '24h',
-      limit: 20,
-      type: 'any',
-    }
+  {
+    period: '24h',
+    limit: 20,
+    type: 'any',
+  }
 
   const trendingMintsPromise = fetcher(
     `${reservoirBaseUrl}/collections/trending-mints/v1`,
