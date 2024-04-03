@@ -40,4 +40,17 @@ const optimizeImage = (imageHref: string | undefined, width: number) => {
   }
   return imageHref ? imageHref : ''
 }
+
+export function proxyImage(contract: string | undefined, tokenId: any | undefined, url: string | undefined, width: number) {
+  if (url) {
+
+    if (url.includes('.mp4') || url.includes('data:'))
+      return url;
+
+    return `https://static.9mm.pro/resize?url=${url}&width=${width}&tokenId=${tokenId}&contract=${contract}`;
+  } else {
+    return "";
+  }
+
+}
 export default optimizeImage

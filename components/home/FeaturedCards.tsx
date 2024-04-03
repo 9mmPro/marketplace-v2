@@ -13,7 +13,7 @@ type FeaturedCardsProps = {
   loading?: boolean
 }
 
-export const FeaturedCards: React.FC<FeaturedCardsProps> = ({
+export const FeaturedCards: React.FC<any> = ({
   collections,
   loading,
 }) => {
@@ -45,7 +45,7 @@ export const FeaturedCards: React.FC<FeaturedCardsProps> = ({
             gap: '12px',
           }}
         >
-          {collections.map((collection) => {
+          {collections.map((collection: any) => {
             const bannerImage =
               collection?.banner ||
               collection?.image ||
@@ -178,7 +178,7 @@ export const FeaturedCards: React.FC<FeaturedCardsProps> = ({
                           />
                         </Box>
 
-                        <Box css={{ mr: '$4' }}>
+                        {collection.count?.toLocaleString() && <Box css={{ mr: '$4' }}>
                           <Text style="subtitle2" color="subtle" as="p">
                             6h Sales
                           </Text>
@@ -186,6 +186,7 @@ export const FeaturedCards: React.FC<FeaturedCardsProps> = ({
                             {collection.count?.toLocaleString()}
                           </Text>
                         </Box>
+                        }
                       </Flex>
                     </Box>
                   </Flex>

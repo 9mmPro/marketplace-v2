@@ -1,6 +1,6 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useTrendingCollections } from '@reservoir0x/reservoir-kit-ui'
+import { useCollections } from '@reservoir0x/reservoir-kit-ui'
 import { OpenSeaVerified } from 'components/common/OpenSeaVerified'
 import { NAVBAR_HEIGHT } from 'components/navbar'
 import {
@@ -18,29 +18,26 @@ import { useMarketplaceChain } from 'hooks'
 import Link from 'next/link'
 import { ComponentPropsWithoutRef, FC, useMemo } from 'react'
 import { useMediaQuery } from 'react-responsive'
-import optimizeImage from 'utils/optimizeImage'
-
-type TrendingCollections = NonNullable<
-  ReturnType<typeof useTrendingCollections>['data']
->
+import { proxyImage } from 'utils/optimizeImage'
 
 type Props = {
-  collections: TrendingCollections
+  collections: ReturnType<typeof useCollections>['data']
   loading?: boolean
-  volumeKey: keyof NonNullable<TrendingCollections[0]['collectionVolume']>
+  volumeKey: '1day' | '7day' | '30day' | 'allTime'
 }
+
 const gridColumns = {
-  gridTemplateColumns: '520px repeat(5, 0.5fr) 250px',
+  gridTemplateColumns: '520px repeat(6, 0.5fr) 250px',
   '@md': {
     gridTemplateColumns: '420px 1fr 1fr 1fr',
   },
 
   '@lg': {
-    gridTemplateColumns: '360px repeat(5, 0.5fr) 250px',
+    gridTemplateColumns: '360px repeat(6, 0.5fr) 250px',
   },
 
   '@xl': {
-    gridTemplateColumns: '520px repeat(5, 0.5fr) 250px',
+    gridTemplateColumns: '520px repeat(6, 0.5fr) 250px',
   },
 }
 
@@ -75,12 +72,11 @@ export const CollectionRankingsTable: FC<Props> = ({
                 Collection
               </Text>
               <Text style="subtitle3" color="subtle">
-                {`${volumeKey.replace('day', 'D')} `}
                 Volume
               </Text>
             </Flex>
           ) : (
-            <TableHeading volumeKey={volumeKey} />
+            <TableHeading />
           )}
           <Flex direction="column" css={{ position: 'relative' }}>
             {collections.map((collection, i) => {
@@ -101,7 +97,7 @@ export const CollectionRankingsTable: FC<Props> = ({
 }
 
 type RankingsTableRowProps = {
-  collection: TrendingCollections[0]
+  collection: ReturnType<typeof useCollections>['data'][0]
   rank: number
   volumeKey: ComponentPropsWithoutRef<
     typeof CollectionRankingsTable
@@ -117,7 +113,7 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
   const isSmallDevice = useMediaQuery({ maxWidth: 900 })
 
   const collectionImage = useMemo(() => {
-    return optimizeImage(collection.image as string, 250)
+    return proxyImage(collection.id, 80000, collection.image as string, 259)
   }, [collection.image])
 
   if (isSmallDevice) {
@@ -170,9 +166,10 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
               />
             </Flex>
           </Box>
+
           <Flex direction="column" align="end" css={{ gap: '$1' }}>
             <FormatCryptoCurrency
-              amount={collection?.collectionVolume?.[volumeKey]}
+              amount={collection?.volume?.[volumeKey]}
               maximumFractionDigits={1}
               logoHeight={16}
               textStyle="subtitle1"
@@ -264,6 +261,16 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
           </Flex>
         </TableCell>
         <TableCell>
+          <Flex>
+            <FormatCryptoCurrency
+              amount={collection?.topBid?.price?.amount?.decimal}
+              textStyle="subtitle1"
+              logoHeight={14}
+              address={collection?.topBid?.price?.currency?.contract}
+            />
+          </Flex>
+        </TableCell>
+        <TableCell>
           <Flex
             direction="column"
             align="start"
@@ -271,37 +278,33 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
             css={{ height: '100%' }}
           >
             <FormatCryptoCurrency
-              amount={collection?.collectionVolume?.[volumeKey]}
+              amount={collection?.volume?.[volumeKey]}
               textStyle="subtitle1"
               logoHeight={14}
             />
           </Flex>
         </TableCell>
+
         <TableCell desktopOnly>
-          {collection?.volumeChange?.['1day'] ? (
-            <PercentChange
-              style="subtitle1"
-              value={collection?.volumeChange?.['1day']}
-            />
-          ) : (
-            '-'
-          )}
+          <PercentChange
+            style="subtitle1"
+            value={collection?.volumeChange?.['1day'] ?? 0}
+          />
         </TableCell>
+
         <TableCell desktopOnly>
-          {collection?.volumeChange?.['7day'] ? (
-            <PercentChange
-              style="subtitle1"
-              value={collection?.volumeChange?.['7day']}
-            />
-          ) : (
-            '-'
-          )}
+          <PercentChange
+            style="subtitle1"
+            value={collection?.volumeChange?.['7day'] ?? 0}
+          />
         </TableCell>
+
         <TableCell desktopOnly>
           <Text style="subtitle1">
             {Number(collection?.tokenCount)?.toLocaleString()}
           </Text>
         </TableCell>
+
         <TableCell desktopOnly>
           <Flex
             css={{
@@ -315,7 +318,7 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
                 return (
                   <img
                     key={image + i}
-                    src={optimizeImage(image, 104)}
+                    src={proxyImage(collection.id, i, image, 259)}
                     loading="lazy"
                     style={{
                       borderRadius: 8,
@@ -343,6 +346,7 @@ const RankingsTableRow: FC<RankingsTableRowProps> = ({
 const headings = [
   'Collection',
   'Floor Price',
+  'Top Offer',
   'Volume',
   '1D Change',
   '7D Change',
@@ -350,7 +354,7 @@ const headings = [
   'Sample Tokens',
 ]
 
-const TableHeading: React.FC<Pick<Props, 'volumeKey'>> = ({ volumeKey }) => (
+const TableHeading = () => (
   <HeaderRow
     css={{
       display: 'none',
@@ -364,12 +368,11 @@ const TableHeading: React.FC<Pick<Props, 'volumeKey'>> = ({ volumeKey }) => (
   >
     {headings.map((heading, i) => (
       <TableCell
-        desktopOnly={i > 2}
+        desktopOnly={i > 3}
         key={heading}
         css={{ textAlign: i === headings.length - 1 ? 'right' : 'left' }}
       >
         <Text style="subtitle3" color="subtle">
-          {heading === 'Volume' && `${volumeKey.replace('day', 'D')} `}
           {heading}
         </Text>
       </TableCell>

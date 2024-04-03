@@ -59,9 +59,9 @@ const Home: NextPage<Props> = ({ ssr }) => {
   const isSmallDevice = useMediaQuery({ query: '(max-width: 800px)' })
 
   const [tab, setTab] = useState<TabValue>('collections')
-  const [sortByTime, setSortByTime] = useState<any>('7d')
+  const [sortByTime, setSortByTime] = useState<any>('24h')
 
-  const [sortByPeriod, setSortByPeriod] = useState<any>('7d')
+  const [sortByPeriod, setSortByPeriod] = useState<any>('24h')
 
   let mintsQuery: Parameters<typeof useTrendingMints>['0'] = {
     limit: 20,
@@ -72,6 +72,7 @@ const Home: NextPage<Props> = ({ ssr }) => {
   const { chain, switchCurrentChain } = useContext(ChainContext)
 
   useEffect(() => {
+    console.log("router.query.chain", router.query.chain);
     if (router.query.chain) {
       let chainIndex: number | undefined
       for (let i = 0; i < supportedChains.length; i++) {
@@ -81,6 +82,8 @@ const Home: NextPage<Props> = ({ ssr }) => {
       }
       if (chainIndex !== -1 && chainIndex) {
         switchCurrentChain(chainIndex)
+        if (router.query.chain === 'pulsechain')
+          router.push(`/${router.query.chain}`)
       }
     }
   }, [router.query])

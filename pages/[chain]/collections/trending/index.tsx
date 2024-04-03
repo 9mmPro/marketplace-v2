@@ -50,6 +50,7 @@ const IndexPage: NextPage<Props> = ({ ssr }) => {
       }
       if (chainIndex !== -1 && chainIndex) {
         switchCurrentChain(chainIndex)
+        router.push(`/${router.query.chain}/collections/trending/`)
       }
     }
   }, [router.query])
@@ -151,10 +152,10 @@ export const getServerSideProps: GetServerSideProps<{
   }
 }> = async ({ res, params }) => {
   let collectionQuery: paths['/collections/trending/v1']['get']['parameters']['query'] =
-    {
-      limit: 1000,
-      period: '24h',
-    }
+  {
+    limit: 1000,
+    period: '24h',
+  }
 
   const chainPrefix = params?.chain || ''
   const chain =

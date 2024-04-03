@@ -7,6 +7,7 @@ import { ChainContext } from 'context/ChainContextProvider'
 import { useMarketplaceChain, useMounted } from 'hooks'
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next'
 import Link from 'next/link'
+import { NORMALIZE_ROYALTIES } from '../_app'
 import {
   ComponentPropsWithoutRef,
   useContext,
@@ -17,20 +18,19 @@ import supportedChains, { DefaultChain } from 'utils/chains'
 
 import * as Tabs from '@radix-ui/react-tabs'
 import {
+  useCollections,
   useTrendingCollections,
   useTrendingMints,
 } from '@reservoir0x/reservoir-kit-ui'
 import ChainToggle from 'components/common/ChainToggle'
-import CollectionsTimeDropdown, {
-  CollectionsSortingOption,
-} from 'components/common/CollectionsTimeDropdown'
+import CollectionsTimeDropdown from 'components/common/pulsechain/CollectionsTimeDropdown'
 import LoadingSpinner from 'components/common/LoadingSpinner'
 import MintsPeriodDropdown, {
   MintsSortingOption,
 } from 'components/common/MintsPeriodDropdown'
 import { FeaturedCards } from 'components/home/FeaturedCards'
 import { TabsContent, TabsList, TabsTrigger } from 'components/primitives/Tab'
-import { CollectionRankingsTable } from 'components/rankings/CollectionRankingsTable'
+import { CollectionRankingsTable } from 'components/rankings/pulsechain/CollectionRankingsTable'
 import { MintRankingsTable } from 'components/rankings/MintRankingsTable'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/router'
@@ -59,7 +59,8 @@ const Home: NextPage<Props> = ({ ssr }) => {
   const isSmallDevice = useMediaQuery({ query: '(max-width: 800px)' })
 
   const [tab, setTab] = useState<TabValue>('collections')
-  const [sortByTime, setSortByTime] = useState<any>('7d')
+  const [sortByTime, setSortByTime] =
+    useState<any>('1DayVolume')
 
   const [sortByPeriod, setSortByPeriod] = useState<any>('7d')
 
@@ -81,22 +82,31 @@ const Home: NextPage<Props> = ({ ssr }) => {
       }
       if (chainIndex !== -1 && chainIndex) {
         switchCurrentChain(chainIndex)
+        router.push(`/${router.query.chain}`)
       }
     }
   }, [router.query])
 
+  let collectionQuery: Parameters<typeof useCollections>['0'] = {
+    limit: 20,
+    sortBy: sortByTime,
+    collectionsSetId: 'cc15657521c22b8b6e7b836819ea02b1fb4cfce319334a90b1d1a5d076ac641b'
+  }
+
+  let featuredCollectionQuery: Parameters<typeof useCollections>['0'] = {
+    limit: 15,
+    collectionsSetId: '457f6988eece41fcc90894c3bdb7490bfb7888fe5a34367c91a9f6e7e6f1cf3a'
+  }
+
+
+
   const {
     data: trendingCollections,
     isValidating: isTrendingCollectionsValidating,
-  } = useTrendingCollections(
+  } = useCollections(
+    collectionQuery,
     {
-      limit: 20,
-      sortBy: 'volume',
-      period: sortByTime,
-    },
-    chain.id,
-    {
-      fallbackData: ssr.trendingCollections,
+      fallbackData: [ssr.trendingCollections],
       keepPreviousData: true,
     }
   )
@@ -104,15 +114,10 @@ const Home: NextPage<Props> = ({ ssr }) => {
   const {
     data: featuredCollections,
     isValidating: isFeaturedCollectionsValidating,
-  } = useTrendingCollections(
+  } = useCollections(
+    featuredCollectionQuery,
     {
-      limit: 20,
-      sortBy: 'sales',
-      period: '24h',
-    },
-    chain.id,
-    {
-      fallbackData: ssr.featuredCollections,
+      fallbackData: [ssr.trendingCollections],
       keepPreviousData: true,
     }
   )
@@ -324,28 +329,29 @@ export const getServerSideProps: GetServerSideProps<{
     },
   }
 
-  let trendingCollectionsQuery: paths['/collections/trending/v1']['get']['parameters']['query'] =
+  const collectionQuery: paths['/collections/v7']['get']['parameters']['query'] =
   {
-    period: '24h',
+    sortBy: '1DayVolume',
+    normalizeRoyalties: NORMALIZE_ROYALTIES,
     limit: 20,
-    sortBy: 'volume',
+    collectionsSetId: 'cc15657521c22b8b6e7b836819ea02b1fb4cfce319334a90b1d1a5d076ac641b'
   }
-
   const trendingCollectionsPromise = fetcher(
-    `${reservoirBaseUrl}/collections/trending/v1`,
-    trendingCollectionsQuery,
+    `${reservoirBaseUrl}/collections/v7`,
+    collectionQuery,
     headers
   )
 
-  let featuredCollectionQuery: paths['/collections/trending/v1']['get']['parameters']['query'] =
+
+  const featuredCollectionQuery: paths['/collections/v7']['get']['parameters']['query'] =
   {
-    period: '24h',
+    normalizeRoyalties: NORMALIZE_ROYALTIES,
     limit: 20,
-    sortBy: 'sales',
+    collectionsSetId: '457f6988eece41fcc90894c3bdb7490bfb7888fe5a34367c91a9f6e7e6f1cf3a'
   }
 
   const featuredCollectionsPromise = fetcher(
-    `${reservoirBaseUrl}/collections/trending/v1`,
+    `${reservoirBaseUrl}/collections/v7`,
     featuredCollectionQuery,
     headers
   )
