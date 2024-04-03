@@ -4,7 +4,7 @@
     "dev": "yarn prebuild && next",
     "build": "yarn prebuild && next build",
     "prebuild": "node ./scripts/prebuild.js",
-    "start": "yarn prebuild && next start -p 3018",
+    "start": "yarn prebuild && next start -p 3015",
     "tsc": "tsc"
   },
   "dependencies": {
@@ -47,6 +47,7 @@
     "react-responsive": "^9.0.0",
     "react-use-websocket": "^4.3.1",
     "react-window": "^1.8.9",
+    "sharp": "^0.33.3",
     "swr": "2.0.1",
     "upgrade": "^1.1.0",
     "usehooks-ts": "^2.9.1",
