@@ -4,7 +4,7 @@
     "dev": "yarn prebuild && next",
     "build": "yarn prebuild && next build",
     "prebuild": "node ./scripts/prebuild.js",
-    "start": "yarn prebuild && next start",
+    "start": "yarn prebuild && next start -p 3018",
     "tsc": "tsc"
   },
   "dependencies": {
